@@ -1,0 +1,35 @@
+@page "/dashboard"
+@using PrintingJobTracker.Services
+@using PrintingJobTracker.Application.WorkOrders
+@using PrintingJobTracker.Models
+@inject IWorkOrdersService WorkOrders
+
+<h1>Dashboard</h1>
+
+@if (_byStatus is null || _byStatus.Count == 0)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">By Status</h5>
+            <ul>
+                @foreach (var kv in _byStatus)
+                {
+                    <li>@kv.Key: @kv.Value</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@code {
+    private Dictionary<JobStatus,int> _byStatus = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _byStatus = await WorkOrders.GetCountsByStatusAsync();
+    }
+}

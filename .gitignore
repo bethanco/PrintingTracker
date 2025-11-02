@@ -1,0 +1,28 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+## NuGet
+*.nupkg
+packages/
+*.snupkg
+.project.lock.json
+project.lock.json
+
+## VS Code
+.vscode/
+
+## Others
+*.DS_Store
+Thumbs.db
+*.tmp
+*.log

@@ -1,0 +1,96 @@
+@using PrintingJobTracker.Shared
+@using Microsoft.AspNetCore.Components.Forms
+@page "/workorders/{id:int}"
+@inject IWorkOrdersService WorkOrdersService
+@inject NavigationManager Nav
+
+<h1>Job Detail</h1>
+
+@if (job is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">@job.JobName</h5>
+            <p class="card-text">
+                <strong>Client:</strong> @job.ClientName<br />
+                <strong>Quantity:</strong> @job.Quantity<br />
+                <strong>Carrier:</strong> @job.Carrier<br />
+                <strong>Status:</strong> <span class="badge bg-info text-dark">@job.CurrentStatus</span><br />
+                <strong>Created:</strong> @job.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")<br />
+                <strong>SLA Mail By:</strong> @job.SLA_MailBy.ToLocalTime().ToString("yyyy-MM-dd")
+            </p>
+            <button class="btn btn-primary me-2" @onclick="AdvanceAsync">Advance Status</button>
+            <button class="btn btn-outline-danger" @onclick="()=>showException=true">Mark Exception</button>
+            <button class="btn btn-secondary ms-2" @onclick='()=>Nav.NavigateTo("/workorders")'>Back</button>
+        </div>
+    </div>
+
+    <h3>History</h3>
+    <table class="table table-sm">
+        <thead><tr><th>Date</th><th>Status</th><th>Note</th></tr></thead>
+        <tbody>
+            @foreach (var h in job.StatusHistory.OrderByDescending(h => h.ChangedAt))
+            {
+                <tr>
+                    <td>@h.ChangedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@h.Status</td>
+                    <td>@h.Note</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (showException)
+{
+    <div class="modal-backdrop show"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mark as Exception</h5>
+                    <button type="button" class="btn-close" @onclick="()=>showException=false"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" rows="4" @bind="exceptionNote" placeholder="Add a note (required)"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="()=>showException=false">Cancel</button>
+                    <button class="btn btn-danger" @onclick="ConfirmExceptionAsync" disabled="@string.IsNullOrWhiteSpace(exceptionNote)">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private Job? job;
+    private bool showException = false;
+    private string exceptionNote = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        job = await WorkOrdersService.GetJobAsync(id);
+    }
+
+    private async Task AdvanceAsync()
+    {
+        await WorkOrdersService.AdvanceStatusAsync(id);
+        job = await WorkOrdersService.GetJobAsync(id);
+        StateHasChanged();
+    }
+
+    private async Task ConfirmExceptionAsync()
+    {
+        await WorkOrdersService.MarkExceptionAsync(id, exceptionNote);
+        showException = false;
+        exceptionNote = string.Empty;
+        job = await WorkOrdersService.GetJobAsync(id);
+        StateHasChanged();
+    }
+}
