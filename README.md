@@ -93,4 +93,3 @@ wwwroot/css/site.css    // Estilos dark
 - **Archivo bloqueado al recompilar**: detener app (Stop/Shift+F5) o `taskkill /F /IM PrintingJobTracker.exe`, limpiar `bin/ obj`, recompilar.
 - **No se crean datos seed**: la tabla `Jobs` ya tiene datos; use otra BD o vacíe la actual.
 
-_Fecha: 2025-11-04_
