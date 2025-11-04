@@ -1,0 +1,35 @@
+<!-- Create.razor: clases visuales -->
+<h1 class="h1"><strong>Create Job</strong></h1>
+
+<EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div class="form-grid">
+    <div class="form-field">
+      <label>Client Name</label>
+      <InputText class="input" @bind-Value="Model.ClientName" />
+    </div>
+    <div class="form-field">
+      <label>Job Name</label>
+      <InputText class="input" @bind-Value="Model.JobName" />
+    </div>
+    <div class="form-field">
+      <label>Quantity</label>
+      <InputNumber class="input" TValue="int" @bind-Value="Model.Quantity" />
+    </div>
+    <div class="form-field">
+      <label>Carrier</label>
+      <InputSelect class="input" @bind-Value="Model.Carrier">
+        <option>USPS</option><option>UPS</option><option>FedEx</option>
+      </InputSelect>
+    </div>
+    <div class="form-field">
+      <label>SLA Mail By</label>
+      <InputDate class="input" TValue="DateTime" @bind-Value="Model.SLA_MailBy" />
+    </div>
+  </div>
+
+  <button class="btn primary" type="submit">Save</button>
+  <button class="btn ghost" type="button" @onclick="GoHome">Cancel</button>
+</EditForm>

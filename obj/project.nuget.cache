@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IjacPlsbPhA=",
+  "dgSpecHash": "Gbqb20DwYuw=",
   "success": true,
-  "projectFilePath": "C:\\01.Evertec\\PrintingJobTracker.Fixed\\PrintingJobTracker.csproj",
+  "projectFilePath": "C:\\01.Evertec\\PrintingJobTracker.V3\\PrintingJobTracker.v2\\PrintingJobTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Toshiba\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Toshiba\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

@@ -1,0 +1,19 @@
+@inherits LayoutComponentBase
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="/">Printing Job Tracker</a>
+    <nav class="nav">
+      <NavLink href="/" Match="NavLinkMatch.All">Jobs</NavLink>
+      <NavLink href="/workorders/create">Create</NavLink>
+      <NavLink href="/workorders/overview">Dashboard</NavLink>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="card">
+      @Body
+    </div>
+    <div class="footer">Proyecto técnico · Blazor Server + EF Core</div>
+  </main>
+</div>
