@@ -1,0 +1,65 @@
+@page "/workorders/create"
+@using System.ComponentModel.DataAnnotations
+@inject IWorkOrdersService Service
+@inject NavigationManager Nav
+
+<h1>Create Job</h1>
+
+<EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-grid">
+
+        <div class="form-field">
+            <label for="clientName">Client Name</label>
+            <InputText id="clientName" @bind-Value="Model.ClientName" />
+        </div>
+
+        <div class="form-field">
+            <label for="jobName">Job Name</label>
+            <InputText id="jobName" @bind-Value="Model.JobName" />
+        </div>
+
+        <div class="form-field">
+            <label for="qty">Quantity</label>
+            <InputNumber id="qty" @bind-Value="Model.Quantity" TValue="int" />
+        </div>
+
+        <div class="form-field">
+            <label for="carrier">Carrier</label>
+            <InputSelect id="carrier" @bind-Value="Model.Carrier">
+                <option value="USPS">USPS</option>
+                <option value="UPS">UPS</option>
+                <option value="FedEx">FedEx</option>
+            </InputSelect>
+        </div>
+
+        <div class="form-field">
+            <label for="sla">SLA Mail By</label>
+            <InputDate id="sla" @bind-Value="Model.SLA_MailBy" TValue="DateTime" />
+        </div>
+
+    </div>
+
+    <button type="submit">Save</button>
+    <!-- EVITAMOS comillas anidadas en el atributo -->
+    <button type="button" @onclick="GoHome">Cancel</button>
+</EditForm>
+
+@code {
+    private PrintingJobTracker.Domain.Job Model = new()
+    {
+        Quantity = 1000,
+        SLA_MailBy = DateTime.UtcNow.AddDays(7)
+    };
+
+    private async Task HandleValidSubmit()
+    {
+        await Service.CreateJobAsync(Model);
+        Nav.NavigateTo("/");
+    }
+
+    // Evita comillas anidadas en el atributo @onclick
+    private void GoHome() => Nav.NavigateTo("/");
+}
